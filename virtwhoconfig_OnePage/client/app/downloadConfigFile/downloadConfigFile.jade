@@ -1,0 +1,61 @@
+.row
+    .col-xs-12
+        .app-block.app-block-guided
+            h3.title {{'DOWNLOAD_TITLE' | translate}}
+            .content
+                ol.cp-steps
+                    li.cp-step.cp-step-md
+                        span.cp-step-icon
+                            span.cp-step-icon-custom 1
+                        .cp-step-content
+                            label {{'DOWNLOAD_CONFIG_STEP_1' | translate}}
+                            .row(ng-if="answer.hypervisors.length > 1")
+                                .col-xs-12
+                                    a.btn.btn-app.btn-w-icon(href="" ng-click="downloadZipFile()")
+                                        i.fa.fa-download
+                                        |&#160;{{'BUTTON_DOWNLOAD_ZIP' | translate}}
+                            uib-tabset(type="pills" active="tab.activeTabIndex")
+                                uib-tab(heading="{{hypervisor.hypervisorConfigName}}" index="$index" ng-repeat="hypervisor in answer.hypervisors track by $index")
+                                    .group.nga-fast.nga-stagger.nga-slide-left-all
+                                        pre.code-block.code-terminal
+                                            code.language-shell {{hypervisor.config}}
+                                        a.btn.btn-app.btn-w-icon(href="" ng-click="download(hypervisor.hypervisorConfigName, hypervisor.config)")
+                                            i.fa.fa-download
+                                            |&#160;{{'BUTTON_DOWNLOAD' | translate}}: {{hypervisor.hypervisorConfigName}}.conf
+                    li.cp-step.cp-step-md
+                        span.cp-step-icon
+                            span.cp-step-icon-custom 2
+                        .cp-step-content
+                            label {{'DOWNLOAD_CONFIG_STEP_2' | translate}}
+                            span(ng-bind-html="'DOWNLOAD_CONFIG_STEP_2_DESCRIPTION' | translate | to_trusted")
+                            pre.code-block.code-terminal
+                                code.language-shell {{virtwhoConfigContent}}
+                    li.cp-step.cp-step-md
+                        span.cp-step-icon
+                            span.cp-step-icon-custom 3
+                        .cp-step-content
+                            label {{'DOWNLOAD_CONFIG_STEP_3' | translate}}
+                            span(ng-bind-html="'DOWNLOAD_CONFIG_STEP_3_DESCRIPTION' | translate | to_trusted")
+                            pre.code-block.code-terminal
+                                code.language-shell # virt-who --one-shot
+                    li.cp-step.cp-step-md
+                        span.cp-step-icon
+                            span.cp-step-icon-custom 4
+                        .cp-step-content
+                            label {{'DOWNLOAD_CONFIG_STEP_4' | translate}}
+                            pre.code-block.code-terminal
+                                code.language-shell(ng-if="answer.rhelVersion === 'Red Hat Enterprise Linux 7'") # systemctl restart virt-who.service
+                                code.language-shell(ng-if="answer.rhelVersion === 'Red Hat Enterprise Linux 7'") # systemctl enable virt-who
+                                code.language-shell(ng-if="answer.rhelVersion === 'Red Hat Enterprise Linux 6'") # service virt-who restart
+                                code.language-shell(ng-if="answer.rhelVersion === 'Red Hat Enterprise Linux 6'") # chkconfig virt-who on
+
+                .row
+                    .col-md-12
+                        .alert.alert-info.alert-w-icon(role="alert")
+                            span.web-icon-upload.alert-icon(aria-hidden="true")
+                            |{{'DOWNLOAD_CONFIG_NOTE' | translate}}
+
+                .row
+                    .col-xs-12
+                        button.btn.btn-prev(type="button" ng-click="goBack()") {{'BUTTON_BACK' | translate}}
+                        button.btn.btn-next.pull-right(type="button" ng-click="goNext()") {{'BUTTON_START_OVER' | translate}}

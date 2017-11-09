@@ -1,0 +1,211 @@
+.app-block.app-block-guided
+    h3.title {{'HYPERVISOR_BACKEND_TITLE' | translate}}
+    .content
+        .row
+            .col-md-12
+                uib-tabset(type="pills" active="tab.activeTabIndex")
+                    uib-tab(heading="{{hypervisor.hypervisorConfigName}}" index="$index" ng-repeat="hypervisor in answer.hypervisors track by $index" classes="nga-fast nga-stagger nga-slide-left-all")
+                        .group
+                            .row
+                                .col-md-12
+                                    a.pull-right.wizard-button.cta-link-plain.text-danger(ng-click="removeHypervisor($index)" ng-if="answer.hypervisors.length > 1")
+                                        i.fa.fa-minus-square(aria-hidden="true")
+                                        span &#160;{{'BUTTON_DELETE' | translate}}
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        label(for="hypervisorConfigName_{{$index}}") {{'HYPERVISOR_BACKEND_NAME' | translate}}
+                                        input.form-control(type="text" id="hypervisorConfigName_{{$index}}" name="hypervisorConfigName_{{$index}}" ng-model="hypervisor.hypervisorConfigName" ng-change="configNameChanged(hypervisor.hypervisorConfigName, $index);" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['hypervisorConfigName_' + $index].$error" ng-if="virtWhoForm['hypervisorConfigName_' + $index].$dirty && virtWhoForm['hypervisorConfigName_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                            span(ng-message="duplicate") {{'MESSAGES_DUPLICATE_CONFIG_NAME' | translate}}
+                                .col-md-6
+                                    em.explain {{'HYPERVISOR_BACKEND_NAME_SUGGESTION' | translate}}
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        label(for="reportType_{{$index}}") {{'GENERAL_INFO_REPORT_TYPE' | translate}}
+                                        select.form-control(id="reportType_{{$index}}" name="reportType_{{$index}}" ng-options="option for option in utility.reportTypes" ng-model="hypervisor.reportType")
+                            .row(ng-if="hypervisor.reportType === utility.SATELLITE")
+                                .col-md-12
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label(for="satelliteVersion_{{$index}}") {{'SATELLITE_VERSION_QUESTION' | translate}}
+                                                select(id="satelliteVersion_{{$index}}" name="satelliteVersion_{{$index}}" ng-options="option for option in utility.satelliteVersions" ng-model="hypervisor.satelliteVersion")
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label(for="satelliteHostName_{{$index}}") {{'SATELLITE_HOST_NAME' | translate}}
+                                                input.form-control(id="satelliteHostName_{{$index}}" name="satelliteHostName_{{$index}}" type="text" ng-model="hypervisor.satelliteHostName" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['satelliteHostName_' + $index].$error" ng-if="virtWhoForm['satelliteHostName_' + $index].$dirty && virtWhoForm['satelliteHostName_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em.explain(ng-bind-html="'SATELLITE_HOST_NAME_SUGGESTION' | translate | to_trusted")
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label {{'SATELLITE_ADMIN_USERNAME' | translate}}
+                                                input.form-control(id="satelliteAdminUsername_{{$index}}" name="satelliteAdminUsername_{{$index}}" type="text" ng-model="hypervisor.satelliteAdminUsername" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['satelliteAdminUsername_' + $index].$error" ng-if="virtWhoForm['satelliteAdminUsername_' + $index].$dirty && virtWhoForm['satelliteAdminUsername_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em.explain {{'SATELLITE_ADMIN_USERNAME_SUGGESTION' | translate}}
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label {{'SATELLITE_ADMIN_PASSWORD' | translate}}
+                                                input.form-control(name="satelliteAdminPassword_{{$index}}" type="text" ng-model="hypervisor.satelliteAdminPassword" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['satelliteAdminPassword_' + $index].$error" ng-if="virtWhoForm['satelliteAdminPassword_' + $index].$dirty && virtWhoForm['satelliteAdminPassword_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em.explain {{'SATELLITE_ADMIN_PASSWORD_SUGGESTION' | translate}}
+                                            a.outgoing.search-result(target="_blank" href="https://access.redhat.com/solutions/1262503") {{'HYPERVISOR_BACKEND_ENCRYPT_PASSWORD_KCS_TITLE' | translate}}
+                            .row(ng-if="hypervisor.reportType === utility.SUBSCRIPTION_ASSET_MANAGER")
+                                .col-md-12
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label {{'SAM_HOST_NAME' | translate}}
+                                                input.form-control(name="samHostName_{{$index}}" type="text" ng-model="hypervisor.samHostName" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['samHostName_' + $index].$error" ng-if="virtWhoForm['samHostName_' + $index].$dirty && virtWhoForm['samHostName_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em(ng-bind-html="'SAM_HOST_NAME_SUGGESTION' | translate | to_trusted")
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label {{'SAM_ADMIN_USERNAME' | translate}}
+                                                input.form-control(name="samAdminUsername_{{$index}}" type="text" ng-model="hypervisor.samAdminUsername" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['samAdminUsername_' + $index].$error" ng-if="virtWhoForm['samAdminUsername_' + $index].$dirty && virtWhoForm['samAdminUsername_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em.explain {{'SAM_ADMIN_USERNAME_SUGGESTION' | translate}}
+                                    .row
+                                        .col-md-6
+                                            .form-group
+                                                label {{'SAM_ADMIN_PASSWORD' | translate}}
+                                                input.form-control(name="samAdminPassword_{{$index}}" type="text" ng-model="hypervisor.samAdminPassword" required)
+                                                .input-error.text-center(ng-messages="virtWhoForm['samAdminPassword_' + $index].$error" ng-if="virtWhoForm['samAdminPassword_' + $index].$dirty && virtWhoForm['samAdminPassword_' + $index].$invalid")
+                                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                        .col-md-6
+                                            em.explain {{'SAM_ADMIN_PASSWORD_SUGGESTION' | translate}}
+                                            a.outgoing.search-result(target="_blank" href="https://access.redhat.com/solutions/1262503") {{'HYPERVISOR_BACKEND_ENCRYPT_PASSWORD_KCS_TITLE' | translate}}
+
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_TYPE' | translate}}
+                                        select.form-control(name="hypervisorBackend_{{$index}}" ng-options="option.value as option.label for option in utility.hypervisorBackends" ng-model="hypervisor.hypervisorBackend" ng-change="changeHypervisorBackend(hypervisor)")
+                                .col-md-6
+                                    em.explain(ng-bind-html="'HYPERVISOR_BACKEND_HYPERVISOR_TYPE_SUGGESTION' | translate | to_trusted")
+                            .row(ng-if="hypervisor.hypervisorBackend === utility.RHEVM && hypervisor.rhelVersion !== utility.RHEL6")
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_RHVM_VERSION' | translate}}
+                                        select.form-control(ng-options="option for option in utility.rhevmVersions" ng-model="hypervisor.rhevmVersion")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_HYPERVISOR_ID' | translate}}
+                                        select.form-control(ng-options="option for option in hypervisor.hypervisorIDTypes" ng-model="hypervisor.hypervisorID")
+                                .col-md-6
+                                    em.explain(ng-bind-html="'HYPERVISOR_BACKEND_HYPERVISOR_ID_SUGGESTION' | translate | to_trusted")
+                            .row(ng-if="hypervisor.hypervisorBackend !== utility.VDSM")
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_SERVER' | translate}}
+                                        input.form-control(name="hypervisorAddress_{{$index}}" type="text" ng-model="hypervisor.hypervisorAddress" ng-if="hypervisor.hypervisorBackend !== utility.RHEVM && hypervisor.hypervisorBackend !== utility.LIBVIRT" required)
+                                        input.form-control(name="hypervisorAddress_{{$index}}" type="text" ng-model="hypervisor.hypervisorAddress" placeholder="For example, qemu+ssh://hostname_or_IP/system" ng-if="hypervisor.hypervisorBackend === utility.LIBVIRT" required)
+                                        input.form-control(name="hypervisorAddress_{{$index}}" type="text" ng-model="hypervisor.hypervisorAddress" placeholder="For example, https://hostname_or_IP:443" ng-if="hypervisor.hypervisorBackend === utility.RHEVM && hypervisor.rhevmVersion === 3" required)
+                                        input.form-control(name="hypervisorAddress_{{$index}}" type="text" ng-model="hypervisor.hypervisorAddress" placeholder="For example, https://hostname_or_IP:443/ovirt-engine/" ng-if="hypervisor.hypervisorBackend === utility.RHEVM && hypervisor.rhevmVersion === 4" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['hypervisorAddress_' + $index].$error" ng-if="virtWhoForm['hypervisorAddress_' + $index].$dirty && virtWhoForm['hypervisorAddress_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                .col-md-6
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.RHEVM" ng-bind-html="'HYPERVISOR_BACKEND_SERVER_RHV' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.RHEVM && hypervisor.rhevmVersion === 3" ng-bind-html="'HYPERVISOR_BACKEND_SERVER_RHV_3' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.RHEVM && hypervisor.rhevmVersion === 4" ng-bind-html="'HYPERVISOR_BACKEND_SERVER_RHV_4' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.VMWARE") {{'HYPERVISOR_BACKEND_SERVER_VMWARE' | translate}}
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.HYPERV") {{'HYPERVISOR_BACKEND_SERVER_HYPERV' | translate}}
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.XEN") {{'HYPERVISOR_BACKEND_SERVER_XEN' | translate}}
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.LIBVIRT") {{'HYPERVISOR_BACKEND_SERVER_LIBVIRT' | translate}}
+                            .row(ng-if="hypervisor.hypervisorBackend === utility.LIBVIRT")
+                                .col-md-12
+                                    .alert.alert-info.alert-w-icon(role="alert")
+                                        span.web-icon-upload.alert-icon(aria-hidden="true")
+                                        |{{'HYPERVISOR_BACKEND_LIBVIRT_NOTE' | translate}}
+                            .row(ng-if="hypervisor.hypervisorBackend !== utility.VDSM && hypervisor.hypervisorBackend !== utility.LIBVIRT")
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_USERNAME' | translate}}
+                                        input.form-control(name="hypervisorUsername_{{$index}}" type="text" ng-model="hypervisor.hypervisorUsername" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['hypervisorUsername_' + $index].$error" ng-if="virtWhoForm['hypervisorUsername_' + $index].$dirty && virtWhoForm['hypervisorUsername_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                .col-md-6
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.RHEVM" ng-bind-html="'HYPERVISOR_BACKEND_USERNAME_RHV' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.VMWARE" ng-bind-html="'HYPERVISOR_BACKEND_USERNAME_VMWARE' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.HYPERV" ng-bind-html="'HYPERVISOR_BACKEND_USERNAME_HYPERV' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.hypervisorBackend === utility.XEN") {{'HYPERVISOR_BACKEND_USERNAME_XEN' | translate}}
+                            .row(ng-if="hypervisor.hypervisorBackend !== utility.VDSM && hypervisor.hypervisorBackend !== utility.LIBVIRT")
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_ENCRYPT_PASSWORD' | translate}}
+                                        input.form-control(name="hypervisorEncryptedPassword_{{$index}}" type="text" ng-model="hypervisor.hypervisorEncryptedPassword" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['hypervisorEncryptedPassword_' + $index].$error" ng-if="virtWhoForm['hypervisorEncryptedPassword_' + $index].$dirty && virtWhoForm['hypervisorEncryptedPassword_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                .col-md-6
+                                    em.explain {{'HYPERVISOR_BACKEND_ENCRYPT_PASSWORD_SUGGESTION' | translate}}
+                                    a.outgoing.search-result(target="_blank" href="https://access.redhat.com/solutions/1262503") {{'HYPERVISOR_BACKEND_ENCRYPT_PASSWORD_KCS_TITLE' | translate}}
+                            .row(ng-if="hypervisor.hypervisorBackend !== utility.VDSM")
+                                .col-md-6
+                                    .form-group
+                                        label {{'HYPERVISOR_BACKEND_OWNER' | translate}}
+                                        input.form-control(name="hypervisorOwner_{{$index}}" type="text" ng-model="hypervisor.hypervisorOwner" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['hypervisorOwner_' + $index].$error" ng-if="virtWhoForm['hypervisorOwner_' + $index].$dirty && virtWhoForm['hypervisorOwner_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                .col-md-6
+                                    em.explain(ng-if="hypervisor.reportType === utility.SATELLITE" ng-bind-html="'HYPERVISOR_BACKEND_OWNER_SATELLITE_SUGGESTION' | translate | to_trusted")
+                                    em.explain(ng-if="hypervisor.reportType !== utility.SATELLITE" ng-bind-html="'HYPERVISOR_BACKEND_OWNER_SUGGESTION' | translate | to_trusted")
+
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        label {{'LIMITING_ACCESS_QUESTION' | translate}}
+                                        .raido
+                                            label
+                                                input(type="radio" ng-model="hypervisor.limitingAccessType" value="no")
+                                                span.radio-text &#160; {{'LIMITING_ACCESS_QUESTION_ANSWER_NO' | translate}}
+                                            label
+                                                input(type="radio" ng-model="hypervisor.limitingAccessType" value="include")
+                                                span.radio-text &#160; {{'LIMITING_ACCESS_QUESTION_ANSWER_INCLUDE' | translate}}
+                                            label
+                                                input(type="radio" ng-model="hypervisor.limitingAccessType" value="exclude")
+                                                span.radio-text &#160; {{'LIMITING_ACCESS_QUESTION_ANSWER_EXCLUDE' | translate}}
+                                .col-md-6
+                                    em.explain(ng-bind-html="'LIMITING_ACCESS_NOTE' | translate | to_trusted")
+                            .row(ng-if="hypervisor.limitingAccessType !== 'no'")
+                                .col-md-6
+                                    .form-group
+                                        label(for="limitingHostsList" ng-if="hypervisor.limitingAccessType === 'include'") {{'LIMITING_ACCESS_LABEL_INCLUDE' | translate}}
+                                        label(for="limitingHostsList" ng-if="hypervisor.limitingAccessType === 'exclude'") {{'LIMITING_ACCESS_LABEL_EXCLUDE' | translate}}
+                                        textarea.form-control(id="limitingHostsList_{{$index}}" name="limitingHostsList_{{$index}}" ng-model="hypervisor.limitingHostsList" required)
+                                        .input-error.text-center(ng-messages="virtWhoForm['limitingHostsList_' + $index].$error" ng-if="virtWhoForm['limitingHostsList_' + $index].$dirty && virtWhoForm['limitingHostsList_' + $index].$invalid")
+                                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                                .col-md-6
+                                    em.explain(ng-bind-html="'LIMITING_ACCESS_HOSTS_LIST_NOTE' | translate | to_trusted")
+                            .row
+                                .col-md-12
+                                    a.nav-link(href="" ng-click="addHypervisor();")
+                                        i.fa.fa-plus-square(aria-hidden="true")
+                                        span &#160;{{'BUTTON_ADD' | translate}}
+                                    a.pull-right.wizard-button.cta-link-plain.text-danger(ng-click="removeHypervisor($index)" ng-if="answer.hypervisors.length > 1")
+                                        i.fa.fa-minus-square(aria-hidden="true")
+                                        span &#160;{{'BUTTON_DELETE' | translate}}
+                    li.uib-tab.nav-item
+                        a.nav-link(href="" ng-click="addHypervisor();")
+                            i.fa.fa-plus-square(aria-hidden="true")
+                            span &#160;{{'BUTTON_ADD' | translate}}
+        .row
+            .col-xs-12
+                button.btn.btn-prev(type="button" ng-click="goBack()") {{'BUTTON_BACK' | translate}}
+                button.btn.btn-next.pull-right(type="button" ng-click="goNext()") {{'BUTTON_GENERATE' | translate}}

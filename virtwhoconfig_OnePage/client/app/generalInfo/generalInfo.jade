@@ -1,0 +1,51 @@
+.app-block.app-block-guided
+    h3.title {{'GENERAL_INFO_TITLE' | translate}}
+    .content
+        .group
+            .form-group
+                label(for="rhelVersion") {{'GENERAL_INFO_RHEL_VERSION' | translate}}
+                select.form-control(id="rhelVersion" ng-options="option for option in utility.rhelVersions" ng-model="answer.rhelVersion" ng-change="changeRHELVersion()")
+        .group    
+            .form-group
+                label(for="interval") {{'GENERAL_INFO_INTERVAL' | translate}}
+                .row
+                    .col-md-6
+                        .input-group
+                            input.form-control(type="text" id="interval" name="interval" ng-model="answer.interval" required ng-disabled="answer.isIntervalDisabled")
+                            span.input-group-btn
+                                button.btn.btn-default(type="button" ng-click="answer.isIntervalDisabled = '';") {{'BUTTON_EDIT' | translate}}
+                        .input-error.text-center(ng-messages="virtWhoForm.interval.$error" ng-if="virtWhoForm.interval.$invalid")
+                            span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+                .row
+                    .col-md-12
+                        em.explain(ng-bind-html="'GENERAL_INFO_INTERVAL_SUGGESTION' | translate | to_trusted")
+        .group
+            .row
+                .col-md-6
+                    .checkbox
+                        label
+                            input(type="checkbox" name="isEnableDebugging" ng-model="answer.isEnableDebugging")
+                            span {{'GENERAL_INFO_DEBUG' | translate}}
+                .col-md-6
+                    em.explain(ng-bind-html="'GENERAL_INFO_DEBUG_SUGGESTION' | translate | to_trusted")
+        .group
+            .row
+                .col-md-6
+                    .checkbox
+                        label
+                            input(type="checkbox" name="hasProxy" ng-model="answer.hasProxy")
+                            span {{'PROXY_QUESTION' | translate}}
+                .col-md-6
+                    em.explain {{'PROXY_QUESTION_SUGGESTION' | translate}}
+            .row(ng-if="answer.hasProxy === true")
+                .col-md-12
+                    .form-horizontal
+                        .form-group
+                            label.col-md-6.control-label(for="httpProxy") {{'PROXY_LABEL' | translate}}
+                            .col-md-6
+                                input.form-control(id="httpProxy" name="httpProxy" type="text" ng-model="answer.httpProxy" placeholder="http://proxy-ip-or-hostname:port-number" required)
+                                .input-error.text-center(ng-messages="virtWhoForm.httpProxy.$error" ng-if="virtWhoForm.httpProxy.$dirty && virtWhoForm.httpProxy.$invalid")
+                                    span(ng-message="required") {{'MESSAGES_REQUIRED' | translate}}
+        .row
+            .col-xs-12
+                button.btn.btn-next.pull-right(type="button" ng-click="goNext()") {{'BUTTON_NEXT' | translate}}

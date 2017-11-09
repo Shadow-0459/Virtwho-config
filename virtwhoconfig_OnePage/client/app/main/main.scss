@@ -1,0 +1,42 @@
+.app-block-guided input[type="checkbox"] {
+    margin-top: 3px !important;
+}
+
+@-moz-document url-prefix() {
+    .app-block-guided input[type="checkbox"] {
+        margin-top: 0px !important;
+    }
+
+    .form-horizontal .control-label {
+        margin-top: 0px !important;
+    }
+}
+
+label span.radio-text{
+    font-weight: 100 !important;
+    margin-right: 20px !important;
+}
+
+.pull-right {
+    text-align: right;
+}
+
+em.explain {
+    color: #727272;
+}
+
+.tab-content {
+    padding-top: 0px !important;
+}
+
+.tab-content .group {
+    margin-bottom: 0px !important;
+}
+
+.tab-pane {
+    padding: 0px;
+}
+
+ul.nav.nav-pills {
+    padding-left: 0px !important;
+}

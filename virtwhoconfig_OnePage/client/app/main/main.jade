@@ -1,0 +1,9 @@
+form(name="virtWhoForm", novalidate)
+    .row
+        .col-md-2.col-xs-12
+            nav.subnav.subnav-progress
+                ul
+                    li.li(ng-repeat="item in navigation.menuItems" ui-sref-active="current" ng-show="isShown(item.step)")
+                        a(ui-sref="{{item.link}}" ng-style="isActive(item.link) ? {color: 'white'} : {color: '#808080'}") {{item.title | translate}}
+        .col-md-10.col-xs-12
+            div(ui-view="")
